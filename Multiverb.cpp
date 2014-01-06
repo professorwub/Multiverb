@@ -82,11 +82,13 @@ void Multiverb::SetStereoSep(float stereoSep) {
 	left = wGain * (1.0 + m_stereoSep / 100.0) / 2.0;
 }
 
-void Multiverb::ClearDelayLines(void)
+void Multiverb::Reset(void)
 {
 	for (int i = 0; i < ORDER; i++) {// reset buffers
 		east[i].clear();
 		west[i].clear();
+		xPlus[i] = 0.0;
+		yPlus[i] = 0.0;
 	}
 }
 
