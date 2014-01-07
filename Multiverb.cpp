@@ -1,7 +1,6 @@
 #include "Multiverb.h"
 #include "DelayLine.h"
 #include <math.h>
-#include "JuceHeader.h"
 
 static int delay[] = {// pre-determined sample delays
 	439,
