@@ -24,6 +24,7 @@ void SetStereoSep(float stereoSep);
 float GetStereoSep(void){return m_stereoSep;};
 
 //Use
+void Update(void);
 void Reset(void);
 void ClockProcess(float* LeftSample, float* RightSample); 
 

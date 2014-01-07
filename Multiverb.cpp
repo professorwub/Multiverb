@@ -27,59 +27,43 @@ Multiverb::~Multiverb() {
 }
 
 void Multiverb::SetSampleRate(float sRate) {
-	float alf, ahf;
-
 	sampRate = sRate;
-	for (int i = 0; i < ORDER; i++) { // update attenuation and damping
-		alf = float(pow(10.0, -3.0 * float(delay[i]) / (sampRate * m_t60lf)));
-		ahf = float(pow(10.0, -3.0 * float(delay[i]) / (sampRate * m_t60hf)));
-		damp[i] = (alf - ahf) / (alf + ahf);
-		atten[i] = alf * (1.0 - damp[i]);
-	}
 }
 
 void Multiverb::SetLFReverbTime(float t60lf) {
-	float alf, ahf;
-
 	m_t60lf = t60lf;
-	for (int i = 0; i < ORDER; i++) { // update attenuation and damping
-		alf = float(pow(10.0, -3.0 * float(delay[i]) / (sampRate * m_t60lf)));
-		ahf = float(pow(10.0, -3.0 * float(delay[i]) / (sampRate * m_t60hf)));
-		damp[i] = (alf - ahf) / (alf + ahf);
-		atten[i] = alf * (1.0 - damp[i]);
-	}
 }
 
 void Multiverb::SetHFReverbTime(float t60hf) {
-	float alf, ahf;
-
 	m_t60hf = t60hf;
-	for (int i = 0; i < ORDER; i++) { // update attenuation and damping
-		alf = float(pow(10.0, -3.0 * float(delay[i]) / (sampRate * m_t60lf)));
-		ahf = float(pow(10.0, -3.0 * float(delay[i]) / (sampRate * m_t60hf)));
-		damp[i] = (alf - ahf) / (alf + ahf);
-		atten[i] = alf * (1.0 - damp[i]);
-	}
 }
 
 void Multiverb::SetDryGain(float dryGain) {
 	m_dryGain = dryGain;
-	dGain = float(pow(10.0, dryGain / 20.0));
 }
 
 void Multiverb::SetWetGain(float wetGain) {
 	m_wetGain = wetGain;
-	wGain = float(pow(10.0, wetGain / 20.0));
-	// update derived parameters
-	right = wGain * (1.0 - m_stereoSep / 100.0) / 2.0;
-	left = wGain * (1.0 + m_stereoSep / 100.0) / 2.0;
 }
 
 void Multiverb::SetStereoSep(float stereoSep) {
 	m_stereoSep = stereoSep;
-	// update derived parameters
+}
+
+void Multiverb::Update()
+{// update derived parameters
+	float alf, ahf;
+
+	dGain = float(pow(10.0, m_dryGain / 20.0));
+	wGain = float(pow(10.0, m_wetGain / 20.0));
 	right = wGain * (1.0 - m_stereoSep / 100.0) / 2.0;
 	left = wGain * (1.0 + m_stereoSep / 100.0) / 2.0;
+	for (int i = 0; i < ORDER; i++) { // update attenuation and damping
+		alf = float(pow(10.0, -3.0 * float(delay[i]) / (sampRate * m_t60lf)));
+		ahf = float(pow(10.0, -3.0 * float(delay[i]) / (sampRate * m_t60hf)));
+		damp[i] = (alf - ahf) / (alf + ahf);
+		atten[i] = alf * (1.0 - damp[i]);
+	}
 }
 
 void Multiverb::Reset(void)
